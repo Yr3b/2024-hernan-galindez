@@ -1017,6 +1017,41 @@ SpaceshipGameTest >> testWhenPlayerLandsOnAtomicBombThenAllPlayersStartFromIniti
 ]
 
 { #category : #tests }
+SpaceshipGameTest >> testWhenPlayerLandsOnBlackHoleAndHasOneTurbineThenStopsPlaying [
+
+	| aSpaceship aDiceCollection aGame anotherSpaceship aSpaceshipCollection specificGenerator |
+	aSpaceship := 'Pancho'.
+	anotherSpaceship := 'Seijas'.
+	aSpaceshipCollection := OrderedCollection
+		                        with: aSpaceship
+		                        with: anotherSpaceship.
+	aDiceCollection := { (LoadedDie sequence: #( 9 6 15 )) }.
+	specificGenerator := SpecificSquareGenerator with:
+		                     { (BlackHole create -> 10) }.
+
+	aGame := SpaceshipGame
+		         withPlayers: aSpaceshipCollection
+		         withTurbines: 3
+		         withGameboardLength: 15
+		         withDice: aDiceCollection
+		         withLaps: 1
+		         withParsecs: 100
+		         squareGenerator: specificGenerator
+		         rewards: (IncrementFuelCapacity by: 1)
+		         cards: {
+				         Repeat.
+				         Overload.
+				         Ally }.
+
+	aGame playTurn.
+	aGame playCard: Repeat new from: anotherSpaceship target: aSpaceship.
+	aGame playTurn.
+
+	self assert: (aGame positionOf: aSpaceship) equals: 2.
+	self assert: (aGame positionOf: anotherSpaceship) equals: 7
+]
+
+{ #category : #tests }
 SpaceshipGameTest >> testWhenPlayerLandsOnBlackHoleAndRepeatCardIsUsedThenBlackHoleEffectIsAppliedToTheChoosenPlayer [
 
 	| aSpaceship aDiceCollection aGame anotherSpaceship aSpaceshipCollection specificGenerator |
@@ -1211,6 +1246,40 @@ SpaceshipGameTest >> testWhenPlayerLandsOnHyperGravityAndThrowsHigherNumberThanN
 	aGame playTurn.
 
 	self assert: (aGame positionOf: aSpaceship) equals: 13
+]
+
+{ #category : #tests }
+SpaceshipGameTest >> testWhenPlayerLandsOnHyperGravityHasOneTurbineAndThrowsANumberLowerThanExpectedNumberThenStopsPlaying [
+
+	| aSpaceship anotherSpaceship aDiceCollection aGame aSpaceshipCollection specificGenerator |
+	aSpaceship := 'Pancho'.
+	anotherSpaceship := 'Zepo'.
+	aSpaceshipCollection := OrderedCollection with: aSpaceship with: anotherSpaceship .
+	aDiceCollection := { (LoadedDie sequence: #( 5 2 3 4 2)) }.
+	specificGenerator := SpecificSquareGenerator with:
+		                     { ((HyperGravity withExpectedNumber: 4) -> 6) }.
+	aGame := SpaceshipGame
+		         withPlayers: aSpaceshipCollection
+		         withTurbines: 1
+		         withGameboardLength: 15
+		         withDice: aDiceCollection
+		         withLaps: 1
+		         withParsecs: 100
+		         squareGenerator: specificGenerator
+		         rewards: (IncrementFuelCapacity by: 1)
+		         cards: {
+				         Overload.
+				         Ally.
+				         Acceleration }.
+
+	aGame playTurn.
+	aGame playTurn.
+	aGame playTurn.
+	aGame playTurn.
+	aGame playTurn.
+
+	self assert: (aGame positionOf: aSpaceship) equals: 6.
+	self assert: (aGame positionOf: anotherSpaceship ) equals: 9
 ]
 
 { #category : #tests }

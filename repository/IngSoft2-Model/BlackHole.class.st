@@ -5,7 +5,8 @@ Class {
 }
 
 { #category : #'add/remove' }
-BlackHole >> applyEffectTo: aSpaceship in: aGameboard [
+BlackHole >> applyEffectToSpaceship: aSpaceship in: aGameboard [
 
-	aSpaceship move: -4 in: aGameboard
+	aSpaceship move: -4 in: aGameboard.
+	aSpaceship lostATurbine.
 ]
