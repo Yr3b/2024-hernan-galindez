@@ -14,7 +14,7 @@ HyperJump class >> with: aUnitsArray [
 ]
 
 { #category : #'add/remove' }
-HyperJump >> applyEffectTo: aSpaceship in: aGameboard [
+HyperJump >> applyEffectToSpaceship: aSpaceship in: aGameboard [
 
 	| amountToMove squaresToMove gameboardMeasurment |
 	gameboardMeasurment := aGameboard measurementPerSquare.
@@ -27,15 +27,16 @@ HyperJump >> applyEffectTo: aSpaceship in: aGameboard [
 
 { #category : #'add/remove' }
 HyperJump >> initialize [
-
+	super initialize.
 	occupiedBy := OrderedCollection new.
-	listOfValues := #( 4 11 10 ) asOrderedCollection
+	listOfValues := #( 4 11 10 ) asOrderedCollection.
 ]
 
 { #category : #'add/remove' }
 HyperJump >> initializeWith: aNumberArray [
 
 	occupiedBy := OrderedCollection new.
-	listOfValues := aNumberArray asOrderedCollection
+	listOfValues := aNumberArray asOrderedCollection.
+	state := AffectsOneState new.
 
 ]

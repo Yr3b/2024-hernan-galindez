@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #'add/remove' }
-NormalSquare >> applyEffectTo: aSpaceship in: aGameboard [
+NormalSquare >> applyEffectToSpaceship: aSpaceship in: aGameboard [
 
 	^ self
 ]

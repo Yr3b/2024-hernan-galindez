@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'occupiedBy',
-		'gameboard'
+		'gameboard',
+		'state'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -17,7 +18,13 @@ Square class >> create [
 { #category : #'add/remove' }
 Square >> applyEffectTo: aSpaceship in: aGameboard [
 
-	self subclassResponsibility 
+	state applyEffectTo: self in: aGameboard with: aSpaceship
+]
+
+{ #category : #'add/remove' }
+Square >> applyEffectToSpaceship: aSpaceship in: aGameboard [
+
+	self subclassResponsibility
 ]
 
 { #category : #accessing }
@@ -29,7 +36,8 @@ Square >> includes: aSpaceship [
 { #category : #initialization }
 Square >> initialize [
 
-	occupiedBy := OrderedCollection new
+	occupiedBy := OrderedCollection new.
+	state := AffectsOneState new.
 ]
 
 { #category : #'add/remove' }
@@ -42,4 +50,10 @@ Square >> keep: aSpaceship [
 Square >> leaves: aSpaceship [
 
 	occupiedBy remove: aSpaceship
+]
+
+{ #category : #'as yet unclassified' }
+Square >> togglePolarity [
+
+	state := state togglePolarity
 ]

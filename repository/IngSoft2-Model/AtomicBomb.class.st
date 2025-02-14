@@ -5,7 +5,14 @@ Class {
 }
 
 { #category : #'add/remove' }
-AtomicBomb >> applyEffectTo: aSpaceship in: aGameboard [
+AtomicBomb >> applyEffectToSpaceship: aSpaceship in: aGameboard [
 
-	aGameboard moveAllToStart 
+	aGameboard moveToStart: aSpaceship.
+]
+
+{ #category : #initialization }
+AtomicBomb >> initialize [
+
+	super initialize.
+	state := AffectsEveryoneState new.
 ]

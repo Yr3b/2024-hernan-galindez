@@ -15,9 +15,15 @@ MoonWalk class >> withSquaresToMove: anAmountOfSquares [
 ]
 
 { #category : #'add/remove' }
-MoonWalk >> applyEffectTo: aSpaceship in: aGameboard [
+MoonWalk >> applyEffectToSpaceship: aSpaceship in: aGameboard [
 
-	aGameboard moveAllBack: squaresToMove except: aSpaceship
+	aSpaceship move: squaresToMove negated in: aGameboard.
+]
+
+{ #category : #initialization }
+MoonWalk >> initialize [
+	super initialize.
+	state := AffectsAllState new
 ]
 
 { #category : #initialization }

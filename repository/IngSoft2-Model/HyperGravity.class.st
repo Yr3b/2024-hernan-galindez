@@ -14,7 +14,7 @@ HyperGravity class >> withExpectedNumber: aNumber [
 ]
 
 { #category : #'add/remove' }
-HyperGravity >> applyEffectTo: aSpaceship in: aGameboard [
+HyperGravity >> applyEffectToSpaceship: aSpaceship in: aGameboard [
 
 	aSpaceship needsToThrow: expectedNumber.
 
@@ -23,5 +23,5 @@ HyperGravity >> applyEffectTo: aSpaceship in: aGameboard [
 { #category : #'add/remove' }
 HyperGravity >> initializeWithExpectedNumber: aNumber [
 
-	expectedNumber := aNumber
+	expectedNumber := aNumber.
 ]
