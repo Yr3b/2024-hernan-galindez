@@ -9,15 +9,16 @@ Class {
 		'lostTurns',
 		'deck',
 		'ally',
-		'diceAdjustment'
+		'diceAdjustment',
+		'currentTurbines'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #initialization }
-Spaceship class >> withName: aName withFuel: fuelCapacity [
+Spaceship class >> withName: aName withFuel: fuelCapacity withTurbines: turbine [
 
-	^ self new initializeWithName: aName withFuel: fuelCapacity
+	^ self new initializeWithName: aName withFuel: fuelCapacity withTurbines: turbine 
 ]
 
 { #category : #accessing }
@@ -37,13 +38,14 @@ Spaceship >> applyPenaltyIn: gameboard [
 
 	gameboard moveToStart: self.
 	currentFuel := maxCapacity.
+	self lostATurbine.
 	lostTurns := 2
 ]
 
 { #category : #testing }
 Spaceship >> canPlay [
 
-	^ lostTurns = 0
+	^ (lostTurns = 0) & (currentTurbines > 0)
 ]
 
 { #category : #setting }
@@ -72,16 +74,23 @@ Spaceship >> giveCard: aCard [
 ]
 
 { #category : #initialization }
-Spaceship >> initializeWithName: aName withFuel: fuelCapacity [
+Spaceship >> initializeWithName: aName withFuel: fuelCapacity withTurbines: turbine [
 
 	name := aName.
 	currentFuel := fuelCapacity.
 	maxCapacity := fuelCapacity.
+	currentTurbines := turbine.
 	needsToThrow := 0.
 	lostTurns := 0.
 	diceAdjustment := 0.
 	ally := NullSpaceship new.
 	deck := Deck with: #(  ) asOrderedCollection
+]
+
+{ #category : #'game logic' }
+Spaceship >> lostATurbine [
+	currentTurbines := currentTurbines - 1
+
 ]
 
 { #category : #'game logic' }
@@ -119,7 +128,9 @@ Spaceship >> needsToThrow: expectedNumber [
 { #category : #accessing }
 Spaceship >> playWith: anAmountOfSquares in: aGameboard [
 
-	anAmountOfSquares abs < needsToThrow ifTrue: [ ^ self ].
+	anAmountOfSquares abs < needsToThrow ifTrue: [
+		self lostATurbine.
+		^ self ].
 	needsToThrow := 0.
 	self move: anAmountOfSquares in: aGameboard
 ]
