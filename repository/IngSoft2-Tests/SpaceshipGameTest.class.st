@@ -1666,6 +1666,44 @@ SpaceshipGameTest >> testWhenPlayersCompleteALapThenShowNumbersOfLapsCompleted [
 ]
 
 { #category : #tests }
+SpaceshipGameTest >> testWhenReversePolarityIsPlayedOnAtomicBombThenNoSpaceshipsAreAffected [
+
+	| aSpaceship aDiceCollection aGame anotherSpaceship otherSpaceship aSpaceshipCollection specificGenerator |
+	aSpaceship := 'Pancho'.
+	anotherSpaceship := 'Seijas'.
+	otherSpaceship := 'Zepo'.
+	aSpaceshipCollection := OrderedCollection
+		                        with: aSpaceship
+		                        with: anotherSpaceship
+		                        with: otherSpaceship.
+	aDiceCollection := { (LoadedDie sequence: #( 8 8 4 )) }.
+	specificGenerator := SpecificSquareGenerator with:
+		                     { (AtomicBomb new -> 5) }.
+	aGame := SpaceshipGame
+		         withPlayers: aSpaceshipCollection
+		         withTurbines: 3
+		         withGameboardLength: 13
+		         withDice: aDiceCollection
+		         withLaps: 1
+		         withParsecs: 100
+		         squareGenerator: specificGenerator
+		         rewards: (IncrementFuelCapacity by: 1)
+		         cards: {
+				         ReversePolarity.
+				         Overload.
+				         Ally }.
+
+	aGame playCard: ReversePolarity new from: aSpaceship target: 5.
+	aGame playTurn.
+	aGame playTurn.
+	aGame playTurn.
+
+	self assert: (aGame positionOf: aSpaceship) equals: 9.
+	self assert: (aGame positionOf: anotherSpaceship) equals: 9.
+	self assert: (aGame positionOf: otherSpaceship) equals: 5
+]
+
+{ #category : #tests }
 SpaceshipGameTest >> testWhenReversePolarityIsPlayedOnBlackHoleThenEffectIsAppliedToAllExceptTheLandingSpaceship [
 
 	| aSpaceship aDiceCollection aGame anotherSpaceship otherSpaceship aSpaceshipCollection specificGenerator |
@@ -1701,6 +1739,47 @@ SpaceshipGameTest >> testWhenReversePolarityIsPlayedOnBlackHoleThenEffectIsAppli
 	self assert: (aGame positionOf: aSpaceship) equals: 5.
 	self assert: (aGame positionOf: anotherSpaceship) equals: 5.
 	self assert: (aGame positionOf: otherSpaceship) equals: 5
+]
+
+{ #category : #tests }
+SpaceshipGameTest >> testWhenReversePolarityIsPlayedOnWormHoleThenAllTheSpaceshipsMovesToTheExitSquareExceptTheLandingSpaceship [
+	| aSpaceship aDiceCollection aGame anotherSpaceship otherSpaceship aSpaceshipCollection specificGenerator wormholePair wormhole anotherWormhole|
+	aSpaceship := 'Pancho'.
+	anotherSpaceship := 'Seijas'.
+	otherSpaceship := 'Zepo'.
+	aSpaceshipCollection := OrderedCollection
+		                        with: aSpaceship
+		                        with: anotherSpaceship
+		                        with: otherSpaceship.
+	aDiceCollection := { (LoadedDie sequence: #( 8 8 3 )) }.
+	wormholePair := Wormhole newPair.
+	wormhole := wormholePair first.
+	anotherWormhole := wormholePair second.
+	specificGenerator := SpecificSquareGenerator with: {
+			                     (wormhole -> 4).
+			                     (anotherWormhole -> 5) }.
+	aGame := SpaceshipGame
+		         withPlayers: aSpaceshipCollection
+		         withTurbines: 3
+		         withGameboardLength: 13
+		         withDice: aDiceCollection
+		         withLaps: 1
+		         withParsecs: 100
+		         squareGenerator: specificGenerator
+		         rewards: (IncrementFuelCapacity by: 1)
+		         cards: {
+				         ReversePolarity.
+				         Overload.
+				         Ally }.
+
+	aGame playCard: ReversePolarity new from: aSpaceship target: 4.
+	aGame playTurn.
+	aGame playTurn.
+	aGame playTurn.
+
+	self assert: (aGame positionOf: aSpaceship) equals: 5.
+	self assert: (aGame positionOf: anotherSpaceship) equals: 5.
+	self assert: (aGame positionOf: otherSpaceship) equals: 4
 ]
 
 { #category : #tests }
