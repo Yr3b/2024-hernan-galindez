@@ -39,10 +39,10 @@ Wormhole class >> newPairIn: aBoard at: firstPosition and: secondPosition [
 ]
 
 { #category : #'add/remove' }
-Wormhole >> applyEffectTo: aSpaceship in: aGameboard [
+Wormhole >> applyEffectToSpaceship: aSpaceship in: aGameboard [
 
-	occupiedBy remove: aSpaceship.
-	connection keep: aSpaceship
+	(occupiedBy includes: aSpaceship) ifTrue: [ self leaves: aSpaceship ].
+    connection keep: aSpaceship.
 ]
 
 { #category : #'public - line' }

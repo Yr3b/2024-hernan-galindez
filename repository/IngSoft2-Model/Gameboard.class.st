@@ -59,6 +59,12 @@ Gameboard >> find: aTarget [
 		  ifNone: [ Error signal: 'spaceship not found' ]
 ]
 
+{ #category : #accessing }
+Gameboard >> findSquare: index [
+
+	^board at: index ifAbsent: [ nil ].
+]
+
 { #category : #initialization }
 Gameboard >> initializeWithNumberOfSquares: aNumberOfSquares withSpaceships: spaceshipsCollection withParsecs: aNumberOfParsecs withDice: aDiceCollection withGenerator: squareGenerator withCards: cardCollection [
 
@@ -153,4 +159,10 @@ Gameboard >> setPlayersAtFirstPosition: players [
 Gameboard >> size [
 
 	^ board size
+]
+
+{ #category : #accessing }
+Gameboard >> spaceships [
+
+	^ spaceships
 ]

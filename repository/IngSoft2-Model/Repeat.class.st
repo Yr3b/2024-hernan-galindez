@@ -5,10 +5,10 @@ Class {
 }
 
 { #category : #accessing }
-Repeat >> applyFrom: aSpaceship target: otherSpaceshipName blockToApplyLastEffect: blockToApplyLastEffect [
+Repeat >> applyFrom: aSpaceship target: otherSpaceshipName in: gameboard [
 
 	| target |
 	target := players detect: [ :player |
 		          player name = otherSpaceshipName ].
-	blockToApplyLastEffect value: target
+	gameboard applyLastEffectTo: target
 ]
